@@ -22,7 +22,7 @@ jobs:
           ./build.sh --dmg
           codesign --verify --deep --strict build/CodexStatusBar.app
           plutil -lint build/CodexStatusBar.app/Contents/Info.plist
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: CodexStatusBar
           path: build/CodexStatusBar.dmg
