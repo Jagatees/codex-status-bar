@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Test hooks
+        run: node --test tests/*.test.js
+      - name: Build and verify app
+        run: |
+          ./build.sh --dmg
+          codesign --verify --deep --strict build/CodexStatusBar.app
+          plutil -lint build/CodexStatusBar.app/Contents/Info.plist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CodexStatusBar
+          path: build/CodexStatusBar.dmg
